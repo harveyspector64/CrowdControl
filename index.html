@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Crowd Behavior Simulator</title>
+  <style>
+    canvas {
+      border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="gameCanvas" width="800" height="600"></canvas>
+
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    const individuals = [];
+    const numIndividuals = 50;
+    const individualSize = 10;
+
+    // Initialize individuals
+    for (let i = 0; i < numIndividuals; i++) {
+      individuals.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        vx: Math.random() * 2 - 1,
+        vy: Math.random() * 2 - 1,
+      });
+    }
+
+    // Update function
+    function update() {
+      // Clear canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Update individual positions
+      for (let i = 0; i < numIndividuals; i++) {
+        const individual = individuals[i];
+        individual.x += individual.vx;
+        individual.y += individual.vy;
+
+        // Wrap around edges
+        if (individual.x < 0) individual.x = canvas.width;
+        if (individual.x > canvas.width) individual.x = 0;
+        if (individual.y < 0) individual.y = canvas.height;
+        if (individual.y > canvas.height) individual.y = 0;
+
+        // Draw individual
+        ctx.fillStyle = 'rgba(0, 0, 255, 0.5)';
+        ctx.beginPath();
+        ctx.arc(individual.x, individual.y, individualSize, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Call update function again
+      requestAnimationFrame(update);
+    }
+
+    // Start the simulation
+    update();
+  </script>
+</body>
+</html>
